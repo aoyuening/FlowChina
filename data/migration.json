@@ -1,0 +1,28 @@
+{
+  "metadata": {
+    "project": "流动中国——人口迁徙与城市吸引力数据可视化平台",
+    "dataType": "示例演示数据",
+    "warning": "正式比赛请替换为公开权威数据",
+    "unit": "万人（演示口径）",
+    "years": [2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025]
+  },
+  "migrationFlows": [
+    { "source": "郑州", "target": "北京", "value": 20 },
+    { "source": "郑州", "target": "上海", "value": 15 },
+    { "source": "石家庄", "target": "北京", "value": 14 },
+    { "source": "哈尔滨", "target": "北京", "value": 11 },
+    { "source": "合肥", "target": "杭州", "value": 18 },
+    { "source": "南昌", "target": "杭州", "value": 13 },
+    { "source": "武汉", "target": "深圳", "value": 17 },
+    { "source": "长沙", "target": "深圳", "value": 15 },
+    { "source": "重庆", "target": "成都", "value": 16 },
+    { "source": "贵阳", "target": "成都", "value": 12 },
+    { "source": "福州", "target": "广州", "value": 10 },
+    { "source": "济南", "target": "苏州", "value": 9 }
+  ],
+  "replacementGuide": {
+    "runtimeDataFile": "js/data.js",
+    "fields": ["城市坐标", "净流入排名", "净流出排名", "年度趋势", "城市指标", "迁徙关系", "区域占比"],
+    "suggestedSources": ["国家统计局", "各地统计年鉴", "各城市统计公报", "第七次全国人口普查"]
+  }
+}

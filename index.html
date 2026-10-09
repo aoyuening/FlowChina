@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="流动中国——人口迁徙与城市吸引力数据可视化平台">
+  <title>流动中国 · FLOWING CHINA</title>
+  <link rel="icon" href="data:,">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="background-grid" aria-hidden="true"></div>
+  <canvas id="particle-canvas" aria-hidden="true"></canvas>
+
+  <header class="site-header" id="site-header">
+    <a class="brand" href="#overview" aria-label="返回全国态势">
+      <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span><strong>流动中国</strong><small>FLOWING CHINA</small></span>
+    </a>
+    <nav class="main-nav" aria-label="主导航">
+      <a class="nav-link active" href="#overview">全国态势</a>
+      <a class="nav-link" href="#trend">流动趋势</a>
+      <a class="nav-link" href="#city-profile">城市画像</a>
+      <a class="nav-link" href="#relations">迁徙关系</a>
+      <a class="nav-link" href="#insights">数据洞察</a>
+    </nav>
+    <div class="header-meta"><span class="live-dot"></span><span>演示数据模式</span></div>
+  </header>
+
+  <main>
+    <section class="hero section" id="overview" data-section="overview">
+      <div class="hero-heading reveal">
+        <div>
+          <p class="eyebrow">POPULATION MOBILITY OBSERVATORY · 2025</p>
+          <h1>流动中国 <span>FLOWING CHINA</span></h1>
+          <p class="hero-subtitle">人口迁徙与城市吸引力数据可视化平台</p>
+        </div>
+        <div class="year-control">
+          <label for="year-select">观察年份</label>
+          <select id="year-select" aria-label="选择观察年份"></select>
+          <span id="year-status" aria-live="polite">当前展示 2025 年样本</span>
+        </div>
+      </div>
+
+      <div class="demo-notice reveal">
+        <span class="notice-icon">i</span>
+        <span><strong>数据说明：</strong>本页面为示例演示数据，正式比赛请替换为公开权威数据。所有观察仅基于当前数据样本。</span>
+      </div>
+
+      <div class="metric-grid reveal" aria-label="全国态势关键指标">
+        <article class="metric-card">
+          <span class="metric-index">01</span>
+          <p>重点城市样本数量</p>
+          <strong class="counter" data-metric="cityCount">0</strong><em>座</em>
+          <div class="metric-line"><i style="--value:100%"></i></div>
+        </article>
+        <article class="metric-card">
+          <span class="metric-index">02</span>
+          <p>总人口变化量</p>
+          <strong class="counter" data-metric="totalChange">0</strong><em>万人</em>
+          <div class="metric-line"><i style="--value:82%"></i></div>
+        </article>
+        <article class="metric-card">
+          <span class="metric-index">03</span>
+          <p>净流入城市数量</p>
+          <strong class="counter" data-metric="inflowCount">0</strong><em>座</em>
+          <div class="metric-line"><i style="--value:68%"></i></div>
+        </article>
+        <article class="metric-card warm">
+          <span class="metric-index">04</span>
+          <p>平均吸引力指数</p>
+          <strong class="counter" data-metric="avgAttraction">0</strong><em>分</em>
+          <div class="metric-line"><i style="--value:78%"></i></div>
+        </article>
+      </div>
+
+      <div class="overview-grid reveal">
+        <article class="panel ranking-panel">
+          <div class="panel-header">
+            <div><span class="panel-kicker">INFLOW RANKING</span><h2>人口净流入城市 TOP10</h2></div>
+            <span class="unit">单位：万人</span>
+          </div>
+          <div id="inflow-chart" class="chart rank-chart" role="img" aria-label="人口净流入城市前十名横向柱状图"></div>
+        </article>
+
+        <article class="panel map-panel">
+          <div class="panel-header map-header">
+            <div><span class="panel-kicker">MIGRATION FLOW</span><h2>中国人口迁徙流向地图</h2></div>
+            <div class="map-legend" aria-label="地图图例"><span><i class="legend-dot"></i>重点城市</span><span><i class="legend-line"></i>迁徙方向</span></div>
+          </div>
+          <div id="china-map" class="chart map-chart" role="img" aria-label="中国人口迁徙动态流向地图"></div>
+          <div class="map-focus" id="map-focus" aria-live="polite">
+            <span class="map-focus-label">当前聚焦</span>
+            <strong id="map-focus-city">全国迁徙网络</strong>
+            <p id="map-focus-detail">点击地图城市点查看流入与流出信息</p>
+            <button type="button" id="map-profile-button" hidden>查看城市画像 →</button>
+          </div>
+          <button class="map-reset" id="map-reset" type="button">重置视图</button>
+        </article>
+
+        <article class="panel attraction-panel">
+          <div class="panel-header">
+            <div><span class="panel-kicker">CITY MAGNETISM</span><h2>重点城市吸引力指数</h2></div>
+            <span class="unit">综合评分</span>
+          </div>
+          <div id="attraction-chart" class="chart attraction-chart" role="img" aria-label="重点城市吸引力指数对比图"></div>
+        </article>
+
+        <article class="panel national-trend-panel">
+          <div class="panel-header">
+            <div><span class="panel-kicker">NATIONAL TREND</span><h2>全国人口变化趋势</h2></div>
+            <div class="trend-legend"><span><i class="teal"></i>样本城市人口增量</span><span><i class="orange"></i>净流入规模</span></div>
+          </div>
+          <div id="national-trend-chart" class="chart national-trend-chart" role="img" aria-label="2018至2025年全国人口变化趋势折线图"></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section content-section" id="trend" data-section="trend">
+      <div class="section-heading reveal">
+        <div><p class="section-no">01 / FLOW TREND</p><h2>流动趋势</h2></div>
+        <p>从城市净流出、区域构成和年度轨迹三个尺度，观察人口流动的方向与节奏。</p>
+      </div>
+      <div class="trend-layout reveal">
+        <article class="panel outflow-panel">
+          <div class="panel-header"><div><span class="panel-kicker">OUTFLOW RANKING</span><h3>人口净流出城市 TOP10</h3></div><span class="unit">单位：万人</span></div>
+          <div id="outflow-chart" class="chart standard-chart" role="img" aria-label="人口净流出城市前十名横向柱状图"></div>
+        </article>
+        <article class="panel region-panel">
+          <div class="panel-header"><div><span class="panel-kicker">REGIONAL SHARE</span><h3>区域人口流动占比</h3></div><span class="unit">流动人口样本</span></div>
+          <div id="region-donut-chart" class="chart standard-chart" role="img" aria-label="东部中部西部东北人口流动占比环形图"></div>
+        </article>
+        <article class="panel city-trend-panel">
+          <div class="panel-header">
+            <div><span class="panel-kicker">CITY TRAJECTORY</span><h3>重点城市人口变化趋势</h3></div>
+            <div class="chart-control"><label for="trend-city-select">对比城市</label><select id="trend-city-select"></select></div>
+          </div>
+          <div id="city-trend-chart" class="chart standard-chart" role="img" aria-label="重点城市2018至2025年人口变化趋势折线图"></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section content-section" id="city-profile" data-section="city-profile">
+      <div class="section-heading reveal">
+        <div><p class="section-no">02 / CITY PROFILE</p><h2>城市画像</h2></div>
+        <p>以六个标准化维度拆解城市吸引力，查看增长、就业与青年人口之间的结构关系。</p>
+      </div>
+
+      <div class="city-selector reveal" role="group" aria-label="选择城市" id="city-selector"></div>
+
+      <article class="city-hero panel reveal">
+        <div class="city-identity">
+          <span class="city-code" id="city-code">CN·BJ</span>
+          <h3 id="profile-city-name">北京</h3>
+          <p id="profile-city-en">BEIJING</p>
+          <span class="city-region" id="profile-city-region">京津冀城市群</span>
+        </div>
+        <div class="city-metrics" id="city-metrics"></div>
+      </article>
+
+      <div class="profile-grid reveal">
+        <article class="panel radar-panel">
+          <div class="panel-header"><div><span class="panel-kicker">ATTRACTIVENESS DNA</span><h3>城市吸引力雷达</h3></div><span class="unit">标准化分值 / 100</span></div>
+          <div id="radar-chart" class="chart profile-chart" role="img" aria-label="所选城市六维吸引力雷达图"></div>
+        </article>
+        <article class="panel profile-trend-panel">
+          <div class="panel-header"><div><span class="panel-kicker">POPULATION CHANGE</span><h3>人口变化轨迹</h3></div><span class="unit">2018—2025</span></div>
+          <div id="profile-trend-chart" class="chart profile-chart" role="img" aria-label="所选城市人口变化趋势图"></div>
+        </article>
+        <article class="panel rank-panel">
+          <div class="panel-header"><div><span class="panel-kicker">DIMENSION RANK</span><h3>指标样本排名</h3></div><span class="unit">数字越小排名越高</span></div>
+          <div id="indicator-rank-list" class="indicator-rank-list"></div>
+        </article>
+        <article class="panel insight-panel">
+          <span class="insight-number">CITY NOTE</span>
+          <blockquote id="city-insight">城市洞察正在生成。</blockquote>
+          <p>基于当前数据样本的可视化观察</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section content-section" id="relations" data-section="relations">
+      <div class="section-heading reveal">
+        <div><p class="section-no">03 / MIGRATION NETWORK</p><h2>迁徙关系</h2></div>
+        <p>连接来源地、目的地与城市群，呈现人口流动网络中的主要通道和区域吸附力。</p>
+      </div>
+      <div class="relations-grid reveal">
+        <article class="panel sankey-panel">
+          <div class="panel-header"><div><span class="panel-kicker">INTERPROVINCIAL FLOW</span><h3>省际迁徙桑基图</h3></div><span class="unit">示例流量指数</span></div>
+          <div id="sankey-chart" class="chart relation-chart" role="img" aria-label="省际人口迁徙关系桑基图"></div>
+        </article>
+        <article class="panel heatmap-panel">
+          <div class="panel-header"><div><span class="panel-kicker">CLUSTER COMPARISON</span><h3>城市群吸引力热力图</h3></div><span class="unit">标准化分值 / 100</span></div>
+          <div id="cluster-heatmap-chart" class="chart relation-chart" role="img" aria-label="五大城市群吸引力指标热力图"></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section content-section" id="insights" data-section="insights">
+      <div class="section-heading reveal">
+        <div><p class="section-no">04 / DATA INSIGHTS</p><h2>数据洞察</h2></div>
+        <p>以下内容均为基于当前数据样本的可视化观察，不代表普遍规律或预测结论。</p>
+      </div>
+      <div class="insights-layout reveal">
+        <div class="insight-list" id="insight-list"></div>
+        <article class="method-card">
+          <div class="method-head"><span>INDEX METHODOLOGY</span><h3>城市吸引力指数说明</h3></div>
+          <p>城市吸引力指数为综合评价指标，由人口增量、就业机会、收入水平、产业活跃度、公共服务、青年人口吸引力等维度标准化计算得到，仅用于可视化分析。</p>
+          <div class="formula">
+            <strong>吸引力指数</strong><span>=</span>
+            <div id="formula-parts"></div>
+          </div>
+          <p class="method-note">计算说明：各维度先进行 0—100 标准化，再按设定权重加权求和。权重可在替换正式数据时依据研究口径调整。</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-brand"><strong>流动中国</strong><span>FLOWING CHINA</span><p>人口迁徙与城市吸引力数据可视化平台</p></div>
+    <div><h3>数据来源</h3><ul><li>国家统计局</li><li>各地统计年鉴</li><li>各城市统计公报</li><li>第七次全国人口普查</li><li>阿里云 DataV GeoAtlas（地图边界）</li></ul></div>
+    <div><h3>技术栈</h3><p>HTML / CSS / JavaScript / ECharts</p><h3>作品说明</h3><p>本作品用于数据可视化比赛展示，当前版本部分数据为演示数据，正式提交前将替换为公开权威数据。</p></div>
+    <p class="copyright">© 2025 FLOWING CHINA · SAMPLE DATA VISUALIZATION</p>
+  </footer>
+
+  <div class="loading-screen" id="loading-screen" aria-live="polite">
+    <div class="loading-mark"><i></i><i></i><i></i></div>
+    <strong>FLOWING CHINA</strong>
+    <span>正在构建迁徙网络</span>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/charts.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
